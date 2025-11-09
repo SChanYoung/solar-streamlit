@@ -1,6 +1,7 @@
 import streamlit as st
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 # 페이지 기본 설정
 st.set_page_config(page_title="태양광 발전량 대시보드", page_icon="☀️", layout="wide")
 
