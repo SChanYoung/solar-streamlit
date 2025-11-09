@@ -25,7 +25,7 @@ with tab3:
     file_id = "1mSRBAQwTWhIPK9XMJmhTr7dw0TFCHX7E"   # 👉 네 파일 ID로 교체
     url = f"https://drive.google.com/uc?id={file_id}"
 
-     try:
+    try:
         # ▶ ② CSV 읽기
         df = pd.read_csv(url)
 
