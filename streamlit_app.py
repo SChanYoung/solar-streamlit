@@ -25,25 +25,30 @@ with tab3:
     file_id = "1mSRBAQwTWhIPK9XMJmhTr7dw0TFCHX7E"   # 👉 네 파일 ID로 교체
     url = f"https://drive.google.com/uc?id={file_id}"
 
-    try:
-        # ▶ ② CSV 불러오기
+     try:
+        # ▶ ② CSV 읽기
         df = pd.read_csv(url)
-        st.success("CSV 불러오기 성공 ✅")
 
-        # ▶ ③ 데이터 미리보기
-        st.dataframe(df.head())
-
-        # ▶ ④ 그래프 그리기
-        #    (예시: datetime, temperature, humidity 컬럼 있다고 가정)
-        if {"datetime", "temperature", "humidity"}.issubset(df.columns):
+        # ▶ ③ 날짜 형식 변환
+        if "datetime" in df.columns:
             df["datetime"] = pd.to_datetime(df["datetime"])
-            st.line_chart(
-                df.set_index("datetime")[["temperature", "humidity"]],
-                height=350
+
+        # ▶ ④ 그래프 표시 (Plotly 사용)
+        import plotly.express as px
+        if {"datetime", "temperature", "humidity"}.issubset(df.columns):
+            fig = px.line(
+                df,
+                x="datetime",
+                y=["temperature", "humidity"],
+                labels={"value": "값", "variable": "항목", "datetime": "시간"},
+                title="📈 온도 & 습도 변화 추이",
+                markers=True
             )
+            st.plotly_chart(fig, use_container_width=True)
         else:
             st.warning("⚠️ 'datetime', 'temperature', 'humidity' 열이 필요합니다.")
 
     except Exception as e:
         st.error(f"CSV 불러오기 실패: {e}")
+
 
