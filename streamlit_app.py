@@ -20,10 +20,7 @@ with tab2:
 with tab3:
     st.subheader("🌤️ 날씨 현황 탭")
     st.write("여기는 현재 날씨 정보를 표시할 공간입니다.")
-    with tab3:
-    st.subheader("🌤️ 날씨 현황 (Google Drive CSV 연동)")
-
-    # ▶ ① 구글드라이브 CSV 주소 지정
+        # ▶ ① 구글드라이브 CSV 주소 지정
     file_id = "1mSRBAQwTWhIPK9XMJmhTr7dw0TFCHX7E"   # 👉 네 파일 ID로 교체
     url = f"https://drive.google.com/uc?id={file_id}"
 
