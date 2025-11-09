@@ -19,22 +19,21 @@ with tab2:
     st.write("여기는 예측값과 실측값을 비교하는 그래프가 들어갈 자리입니다.")
 
 with tab3:
-    st.subheader("🌤️ 날씨 현황 탭")
-    st.write("여기는 현재 날씨 정보를 표시할 공간입니다.")
-        # ▶ ① 구글드라이브 CSV 주소 지정
+    st.subheader("🌤️ 날씨 현황 (Google Drive CSV 연동)")
+
+    # Google Drive 파일 ID (예: https://drive.google.com/file/d/📁ID/view?usp=sharing)
     file_id = "1mSRBAQwTWhIPK9XMJmhTr7dw0TFCHX7E"   # 👉 네 파일 ID로 교체
     url = f"https://drive.google.com/uc?id={file_id}"
 
     try:
-        # ▶ ② CSV 읽기
+        # CSV 불러오기
         df = pd.read_csv(url)
 
-        # ▶ ③ 날짜 형식 변환
+        # 날짜 변환
         if "datetime" in df.columns:
             df["datetime"] = pd.to_datetime(df["datetime"])
 
-        # ▶ ④ 그래프 표시 (Plotly 사용)
-        import plotly.express as px
+        # Plotly 그래프
         if {"datetime", "temperature", "humidity"}.issubset(df.columns):
             fig = px.line(
                 df,
@@ -50,5 +49,3 @@ with tab3:
 
     except Exception as e:
         st.error(f"CSV 불러오기 실패: {e}")
-
-
