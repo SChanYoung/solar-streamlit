@@ -34,11 +34,11 @@ with tab3:
             df["datetime"] = pd.to_datetime(df["datetime"])
 
         # Plotly 그래프
-        if {"datetime", "temperature", "humidity"}.issubset(df.columns):
+        if {"datetime", "air_temp", "cloud_opacity"}.issubset(df.columns):
             fig = px.line(
                 df,
                 x="datetime",
-                y=["temperature", "humidity"],
+                y=["air_temp", "cloud_opacity"],
                 labels={"value": "값", "variable": "항목", "datetime": "시간"},
                 title="📈 온도 & 습도 변화 추이",
                 markers=True
