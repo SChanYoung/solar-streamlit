@@ -20,3 +20,32 @@ with tab2:
 with tab3:
     st.subheader("🌤️ 날씨 현황 탭")
     st.write("여기는 현재 날씨 정보를 표시할 공간입니다.")
+    with tab3:
+    st.subheader("🌤️ 날씨 현황 (Google Drive CSV 연동)")
+
+    # ▶ ① 구글드라이브 CSV 주소 지정
+    file_id = "1mSRBAQwTWhIPK9XMJmhTr7dw0TFCHX7E"   # 👉 네 파일 ID로 교체
+    url = f"https://drive.google.com/uc?id={file_id}"
+
+    try:
+        # ▶ ② CSV 불러오기
+        df = pd.read_csv(url)
+        st.success("CSV 불러오기 성공 ✅")
+
+        # ▶ ③ 데이터 미리보기
+        st.dataframe(df.head())
+
+        # ▶ ④ 그래프 그리기
+        #    (예시: datetime, temperature, humidity 컬럼 있다고 가정)
+        if {"datetime", "temperature", "humidity"}.issubset(df.columns):
+            df["datetime"] = pd.to_datetime(df["datetime"])
+            st.line_chart(
+                df.set_index("datetime")[["temperature", "humidity"]],
+                height=350
+            )
+        else:
+            st.warning("⚠️ 'datetime', 'temperature', 'humidity' 열이 필요합니다.")
+
+    except Exception as e:
+        st.error(f"CSV 불러오기 실패: {e}")
+
