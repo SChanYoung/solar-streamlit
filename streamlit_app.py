@@ -69,7 +69,7 @@ with tab2:
                 y="predicted",
                 title=f"☀️ {start_date} ~ {end_date} PV 예측 발전량",
                 labels={"predicted": "예측 발전량 (W)", "datetime": "시간"},
-                color_discrete_sequence=["orange"]
+                color_discrete_sequence=["orange"],
                 name="GHI (W/m²)",
             )
             fig.update_traces(mode="lines")
