@@ -66,18 +66,34 @@ with tab2:
             fig = px.line(
                 filtered,
                 x="datetime",
-                y="predicted",
-                title=f" {start_date} ~ {end_date} PV 예측 발전량",            
+                y="predicted_pv",
+                labels={"datetime": "시간", "predicted_pv": ""},  # ← y축 텍스트 제거
+                title=f"☀️ {start_date} ~ {end_date} PV 예측 발전량",
                 color_discrete_sequence=["orange"]
-                
             )
-            fig.update_traces(mode="lines")
+            
+            # 그래프 선 스타일 설정
+            fig.update_traces(mode="lines", line=dict(width=2.2))
+            
+            # 그래프 제목, 폰트, 위치 설정
             fig.update_layout(
-                
+                xaxis_title="시간",
+                yaxis_title=None,   # ← y축 제목 완전히 제거
                 template="plotly_white",
                 margin=dict(l=40, r=40, t=50, b=40)
             )
+            
+            # ← 그래프 내부 왼쪽 위에 텍스트 추가
+            fig.add_annotation(
+                text="☀️ 예측 발전량 (W)",  # 표시할 문구
+                xref="paper", yref="paper",
+                x=0.02, y=0.98,               # 왼쪽 위 위치
+                showarrow=False,
+                font=dict(size=14, color="orange", family="Arial Bold")
+            )
+            
             st.plotly_chart(fig, use_container_width=True)
+
     
     except Exception as e:
         st.error(f"CSV 불러오기 실패: {e}")
