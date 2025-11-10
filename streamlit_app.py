@@ -60,8 +60,7 @@ with tab3:
             ))
     
             # (3) 레이아웃 설정
-            fig.update_layout(
-                title="🌤️ GHI & Cloud Opacity 변화 추이",
+            fig.update_layout(            
                 xaxis=dict(title="시간"),
                 yaxis=dict(title="GHI (W/m²)", side="left", showgrid=True),
                 yaxis2=dict(
