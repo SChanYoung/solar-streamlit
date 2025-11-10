@@ -54,7 +54,7 @@ with tab3:
                 x=df["datetime"],
                 y=df["cloud_opacity"],
                 mode="lines",
-                name="Cloud opacity (%)",
+                name="Cloud Opacity (%)",
                 line=dict(color="blue", width=2, dash="dot"),
                 yaxis="y2"  # ✅ 두 번째 y축 사용
             ))
