@@ -36,7 +36,7 @@ with tab3:
             df["datetime"] = pd.to_datetime(df["datetime"])
     
         # 필요한 컬럼 확인
-        if {"datetime", "ghi", "cloud_opacity"}.issubset(df.columns):
+        if {"datetime", "ghi", "cloud_opacity", "air_temp"}.issubset(df.columns):
             # Plotly 그래프 객체 생성
             fig = go.Figure()
     
@@ -74,6 +74,15 @@ with tab3:
                 legend=dict(x=0.02, y=0.95),
                 template="plotly_white",
                 margin=dict(l=50, r=50, t=60, b=40)
+            )
+
+            latest_temp = df["air_temp"].iloc[-1]  # 최근 온도값
+            fig.add_annotation(
+                text=f"🌡️ 현재기온: {latest_temp:.1f} °C",
+                xref="paper", yref="paper",
+                x=0.01, y=1.05,
+                showarrow=False,
+                font=dict(size=14, color="crimson", family="Arial Black")
             )
     
             # Streamlit 표시
