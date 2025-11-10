@@ -21,8 +21,7 @@ with tab1:
     st.write("여기는 실시간 발전량 데이터를 표시할 영역입니다.")
 
 with tab2:
-    st.subheader("📈 발전량 예측 비교 탭")
-    st.write("여기는 예측값과 실측값을 비교하는 그래프가 들어갈 자리입니다.")
+    st.subheader("📈 발전량 예측")
     file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"  # 👉 교체하세요
     url = f"https://drive.google.com/uc?id={file_id}"
     
@@ -71,10 +70,10 @@ with tab2:
                 title=f"☀️ {start_date} ~ {end_date} PV 예측 발전량",
                 labels={"predicted": "예측 발전량 (W)", "datetime": "시간"},
                 color_discrete_sequence=["orange"]
+                name="GHI (W/m²)",
             )
             fig.update_traces(mode="lines")
             fig.update_layout(
-                xaxis_title="시간",
                 yaxis_title="예측 발전량 (W)",
                 template="plotly_white",
                 margin=dict(l=40, r=40, t=50, b=40)
