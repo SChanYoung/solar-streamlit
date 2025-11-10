@@ -67,14 +67,14 @@ with tab2:
                 filtered,
                 x="datetime",
                 y="predicted",
-                title=f"☀️ {start_date} ~ {end_date} PV 예측 발전량",
+                title=f" {start_date} ~ {end_date} PV 예측 발전량",
                 labels={"predicted": "예측 발전량 (W)", "datetime": "시간"},
                 color_discrete_sequence=["orange"]
                 
             )
             fig.update_traces(mode="lines")
             fig.update_layout(
-                yaxis_title="예측 발전량 (W)",
+                
                 template="plotly_white",
                 margin=dict(l=40, r=40, t=50, b=40)
             )
