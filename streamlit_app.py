@@ -20,10 +20,10 @@ with tab2:
     st.write("여기는 예측값과 실측값을 비교하는 그래프가 들어갈 자리입니다.")
 
 with tab3:
-    st.subheader("🌤️ 날씨 현황 (Google Drive CSV 연동)")
+    st.subheader("🌤️ 날씨 현황")
 
     # Google Drive 파일 ID (예: https://drive.google.com/file/d/📁ID/view?usp=sharing)
-    file_id = "1mSRBAQwTWhIPK9XMJmhTr7dw0TFCHX7E"   # 👉 네 파일 ID로 교체
+    file_id = "1mSRBAQwTWhIPK9XMJmhTr7dw0TFCHX7E"   # 날씨 파일 ID로 바꾸면됨
     url = f"https://drive.google.com/uc?id={file_id}"
 
     try:
