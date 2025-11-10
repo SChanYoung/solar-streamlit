@@ -76,7 +76,7 @@ with tab3:
                 margin=dict(l=50, r=50, t=60, b=40)
             )
 
-            latest_temp = df["air_temp"].iloc[-1]  # 최근 온도값
+            latest_temp = df["air_temp"].iloc[-2]  # 최근 온도값
             fig.add_annotation(
                 text=f"🌡️ 현재기온: {latest_temp:.1f} °C",
                 xref="paper", yref="paper",
