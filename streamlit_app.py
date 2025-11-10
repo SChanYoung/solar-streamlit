@@ -39,7 +39,7 @@ with tab3:
             fig = px.line(
                 df,
                 x="datetime",
-                y=["air_temp", "cloud_opacity"],
+                y=["ghi", "cloud_opacity"],
                 labels={"value": "값", "variable": "항목", "datetime": "시간"},
                 title="GHI & CLOUD 변화 추이",
                 markers=True
