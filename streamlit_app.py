@@ -1,7 +1,8 @@
-import streamlit as st
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 # 페이지 기본 설정
 st.set_page_config(page_title="태양광 발전량 대시보드", page_icon="☀️", layout="wide")
 
@@ -30,23 +31,55 @@ with tab3:
         # CSV 불러오기
         df = pd.read_csv(url)
 
-        # 날짜 변환
-        if "datetime" in df.columns:
-            df["datetime"] = pd.to_datetime(df["datetime"])
+         # 날짜 변환
+    if "datetime" in df.columns:
+        df["datetime"] = pd.to_datetime(df["datetime"])
 
-        # Plotly 그래프
-        if {"datetime", "ghi", "cloud_opacity"}.issubset(df.columns):
-            fig = px.line(
-                df,
-                x="datetime",
-                y=["ghi", "cloud_opacity"],
-                labels={"value": "값", "variable": "항목", "datetime": "시간"},
-                title="GHI & CLOUD 변화 추이",
-                markers=True
-            )
-            st.plotly_chart(fig, use_container_width=True)
-        else:
-            st.warning("⚠️ 'datetime', 'temperature', 'humidity' 열이 필요합니다.")
+    # 필요한 컬럼 확인
+    if {"datetime", "ghi", "cloud_opacity"}.issubset(df.columns):
+        # Plotly 그래프 객체 생성
+        fig = go.Figure()
 
-    except Exception as e:
-        st.error(f"CSV 불러오기 실패: {e}")
+        # (1) GHI (왼쪽 y축)
+        fig.add_trace(go.Scatter(
+            x=df["datetime"],
+            y=df["ghi"],
+            mode="lines",  # ✅ 점(marker) 제거
+            name="GHI (W/m²)",
+            line=dict(color="orange", width=2)
+        ))
+
+        # (2) Cloud opacity (오른쪽 y축)
+        fig.add_trace(go.Scatter(
+            x=df["datetime"],
+            y=df["cloud_opacity"],
+            mode="lines",
+            name="Cloud opacity (%)",
+            line=dict(color="blue", width=2, dash="dot"),
+            yaxis="y2"  # ✅ 두 번째 y축 사용
+        ))
+
+        # (3) 레이아웃 설정
+        fig.update_layout(
+            title="🌤️ GHI & Cloud Opacity 변화 추이",
+            xaxis=dict(title="시간"),
+            yaxis=dict(title="GHI (W/m²)", side="left", showgrid=True),
+            yaxis2=dict(
+                title="Cloud opacity (%)",
+                overlaying="y",  # ✅ GHI 축 위에 겹쳐서 표시
+                side="right",
+                range=[0, 100],  # ✅ 구름량은 0~100으로 고정
+                showgrid=False
+            ),
+            legend=dict(x=0.02, y=0.95),
+            template="plotly_white",
+            margin=dict(l=50, r=50, t=60, b=40)
+        )
+
+        # Streamlit 표시
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.warning("⚠️ 'datetime', 'ghi', 'cloud_opacity' 열이 필요합니다.")
+
+except Exception as e:
+    st.error(f"CSV 불러오기 실패: {e}")
