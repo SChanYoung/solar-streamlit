@@ -14,7 +14,7 @@ st.title("☀️ 태양광 발전량 대시보드")
 st.write("나중에 정함")
 
 # 탭 3개 구성
-tab1, tab2, tab3 = st.tabs(["🔴 실시간 발전량 비교", "📈 발전량 예측", "🌤️ 날씨 현황"])
+tab1, tab2, tab3 = st.tabs(["🔴 실시간 발전량 비교", "📈 발전량 예측", "🌤️ 기상 현황"])
 
 with tab1:
     st.subheader("🔴 실시간 발전량 탭")
@@ -91,7 +91,7 @@ with tab2:
     except Exception as e:
         st.error(f"CSV 불러오기 실패: {e}")
 with tab3:
-    st.subheader("🌤️ 날씨 현황")
+    st.subheader("🌤️ 기상 현황")
 
     file_id = "1mSRBAQwTWhIPK9XMJmhTr7dw0TFCHX7E"   # 날씨 파일 ID로 바꾸면됨
     url = f"https://drive.google.com/uc?id={file_id}"
