@@ -130,7 +130,7 @@ with tab3:
     
             # (3) 레이아웃 설정
             fig.update_layout(            
-                xaxis=dict(title="시간"),
+                xaxis=dict(title=" "),
                 yaxis=dict(title="GHI (W/m²)", side="left", showgrid=True),
                 yaxis2=dict(
                     title="Cloud opacity (%)",
