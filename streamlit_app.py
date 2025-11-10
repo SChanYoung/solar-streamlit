@@ -81,7 +81,7 @@ with tab3:
             if not valid_temps.empty:
                 latest_temp = valid_temps.iloc[-1]
                 fig.add_annotation(
-                    text=f"🌡️ 현재기온: {latest_temp:.1f} °C",
+                    text=f"🌡️Temperature: {latest_temp:.1f} °C",
                     xref="paper", yref="paper",
                     x=0.01, y=1.05,
                     showarrow=False,
