@@ -76,15 +76,26 @@ with tab3:
                 margin=dict(l=50, r=50, t=60, b=40)
             )
 
-            latest_temp = df["air_temp"].iloc[-2]  # 최근 온도값
-            fig.add_annotation(
-                text=f"🌡️ 현재기온: {latest_temp:.1f} °C",
-                xref="paper", yref="paper",
-                x=0.01, y=1.05,
-                showarrow=False,
-                font=dict(size=14, color="crimson", family="Arial Black")
-            )
-    
+             # ✅ air_temp의 최근 유효값만 표시
+            valid_temps = df["air_temp"].dropna()
+            if not valid_temps.empty:
+                latest_temp = valid_temps.iloc[-1]
+                fig.add_annotation(
+                    text=f"🌡️ 현재기온: {latest_temp:.1f} °C",
+                    xref="paper", yref="paper",
+                    x=0.01, y=1.05,
+                    showarrow=False,
+                    font=dict(size=14, color="crimson", family="Arial Black")
+                )
+            else:
+                fig.add_annotation(
+                    text="🌡️ 현재기온: 데이터 없음",
+                    xref="paper", yref="paper",
+                    x=0.01, y=1.05,
+                    showarrow=False,
+                    font=dict(size=14, color="gray")
+                )
+                
             # Streamlit 표시
             st.plotly_chart(fig, use_container_width=True)
         else:
