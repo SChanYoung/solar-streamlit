@@ -83,14 +83,7 @@ with tab2:
                 margin=dict(l=40, r=40, t=50, b=40)
             )
             
-            # ← 그래프 내부 왼쪽 위에 텍스트 추가
-            fig.add_annotation(
-                text="Predicted_PV (W)",  # 표시할 문구
-                xref="paper", yref="paper",
-                x=0.02, y=0.90,               # 왼쪽 위 위치
-                showarrow=False,
-                font=dict(size=12, color="orange", family="Arial Bold")
-            )
+            
             
             st.plotly_chart(fig, use_container_width=True)
 
