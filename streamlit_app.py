@@ -1,8 +1,12 @@
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+from datetime import datetime
+
+
+
+# Google Drive 파일 ID (예: https://drive.google.com/file/d/📁ID/view?usp=sharing)
 # 페이지 기본 설정
 st.set_page_config(page_title="태양광 발전량 대시보드", page_icon="☀️", layout="wide")
 
@@ -19,11 +23,51 @@ with tab1:
 with tab2:
     st.subheader("📈 발전량 예측 비교 탭")
     st.write("여기는 예측값과 실측값을 비교하는 그래프가 들어갈 자리입니다.")
-
+    file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"  # 👉 교체하세요
+    url = f"https://drive.google.com/uc?id={file_id}"
+    
+    try:
+        df = pd.read_csv(url)
+        df["datetime"] = pd.to_datetime(df["datetime"], errors="coerce")
+    
+        # === 날짜 선택 ===
+        available_dates = sorted(df["datetime"].dt.date.unique())
+        selected_date = st.date_input(
+            "📅 보고 싶은 날짜를 선택하세요",
+            value=available_dates[0],
+            min_value=min(available_dates),
+            max_value=max(available_dates)
+        )
+    
+        # === 선택 날짜 데이터 필터링 ===
+        filtered = df[df["datetime"].dt.date == selected_date]
+    
+        if filtered.empty:
+            st.warning("⚠️ 선택한 날짜에 해당하는 예측 데이터가 없습니다.")
+        else:
+            # === 예측 그래프 그리기 ===
+            fig = px.line(
+                filtered,
+                x="datetime",
+                y="predicted",
+                title=f"☀️ {selected_date} PV 예측 발전량",
+                labels={"predicted": "예측 발전량 (W)", "datetime": "시간"},
+                color_discrete_sequence=["orange"]
+            )
+            fig.update_traces(mode="lines")  # 점 없애기
+            fig.update_layout(
+                xaxis_title="시간",
+                yaxis_title="예측 발전량 (W)",
+                template="plotly_white",
+                margin=dict(l=40, r=40, t=50, b=40)
+            )
+            st.plotly_chart(fig, use_container_width=True)
+    
+    except Exception as e:
+        st.error(f"CSV 불러오기 실패: {e}")
 with tab3:
     st.subheader("🌤️ 날씨 현황")
 
-    # Google Drive 파일 ID (예: https://drive.google.com/file/d/📁ID/view?usp=sharing)
     file_id = "1mSRBAQwTWhIPK9XMJmhTr7dw0TFCHX7E"   # 날씨 파일 ID로 바꾸면됨
     url = f"https://drive.google.com/uc?id={file_id}"
 
