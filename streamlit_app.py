@@ -31,8 +31,8 @@ with tab2:
     
         # 🔧 실제 CSV 열 이름에 맞게 변경
         df.rename(columns={
-            "Timestamp": "datetime",     # 시간 열 이름에 맞게 변경
-            "PV_pred(W)": "predicted_pv"    # 예측 발전량 열 이름에 맞게 변경
+            "datetime": "datetime",     # 시간 열 이름에 맞게 변경
+            "predicted_pv": "predicted"    # 예측 발전량 열 이름에 맞게 변경
         }, inplace=True)
     
         df["datetime"] = pd.to_datetime(df["datetime"], errors="coerce")
