@@ -28,9 +28,16 @@ with tab2:
     
     try:
         df = pd.read_csv(url)
+    
+        # 🔧 실제 CSV 열 이름에 맞게 변경
+        df.rename(columns={
+            "Timestamp": "datetime",     # 시간 열 이름에 맞게 변경
+            "PV_pred(W)": "predicted_pv"    # 예측 발전량 열 이름에 맞게 변경
+        }, inplace=True)
+    
         df["datetime"] = pd.to_datetime(df["datetime"], errors="coerce")
     
-        # === 날짜 선택 ===
+        # === 날짜 범위 선택 ===
         available_dates = sorted(df["datetime"].dt.date.unique())
         default_range = [min(available_dates), max(available_dates)]
     
@@ -41,28 +48,31 @@ with tab2:
             max_value=max(available_dates)
         )
     
-        # === 선택 범위 필터링 ===
-        if isinstance(selected_range, list) and len(selected_range) == 2:
+        # ✅ 하루 or 범위 모두 지원
+        if isinstance(selected_range, tuple):
             start_date, end_date = selected_range
+        elif isinstance(selected_range, list):
+            start_date, end_date = selected_range[0], selected_range[-1]
         else:
             start_date = end_date = selected_range
     
+        # === 데이터 필터링 ===
         mask = (df["datetime"].dt.date >= start_date) & (df["datetime"].dt.date <= end_date)
         filtered = df.loc[mask]
-        
+    
         if filtered.empty:
-            st.warning("⚠️ 선택한 날짜에 해당하는 예측 데이터가 없습니다.")
+            st.warning("⚠️ 선택한 기간에 해당하는 예측 데이터가 없습니다.")
         else:
-            # === 예측 그래프 그리기 ===
+            # === 그래프 ===
             fig = px.line(
                 filtered,
                 x="datetime",
-                y="predicted_pv",
-                title=f"☀️ {selected_date} PV 예측 발전량",
+                y="predicted",
+                title=f"☀️ {start_date} ~ {end_date} PV 예측 발전량",
                 labels={"predicted": "예측 발전량 (W)", "datetime": "시간"},
                 color_discrete_sequence=["orange"]
             )
-            fig.update_traces(mode="lines")  # 점 없애기
+            fig.update_traces(mode="lines")
             fig.update_layout(
                 xaxis_title="시간",
                 yaxis_title="예측 발전량 (W)",
