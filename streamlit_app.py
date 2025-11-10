@@ -67,8 +67,7 @@ with tab2:
                 filtered,
                 x="datetime",
                 y="predicted",
-                title=f" {start_date} ~ {end_date} PV 예측 발전량",
-                labels={"predicted": "예측 발전량 (W)", "datetime": "시간"},
+                title=f" {start_date} ~ {end_date} PV 예측 발전량",            
                 color_discrete_sequence=["orange"]
                 
             )
