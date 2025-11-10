@@ -49,7 +49,7 @@ with tab2:
             fig = px.line(
                 filtered,
                 x="datetime",
-                y="pv",
+                y="predicted_pv",
                 title=f"☀️ {selected_date} PV 예측 발전량",
                 labels={"predicted": "예측 발전량 (W)", "datetime": "시간"},
                 color_discrete_sequence=["orange"]
