@@ -32,16 +32,24 @@ with tab2:
     
         # === 날짜 선택 ===
         available_dates = sorted(df["datetime"].dt.date.unique())
-        selected_date = st.date_input(
-            "📅 보고 싶은 날짜를 선택하세요",
-            value=available_dates[0],
+        default_range = [min(available_dates), max(available_dates)]
+    
+        selected_range = st.date_input(
+            "📆 보고 싶은 날짜 범위를 선택하세요",
+            value=default_range,
             min_value=min(available_dates),
             max_value=max(available_dates)
         )
     
-        # === 선택 날짜 데이터 필터링 ===
-        filtered = df[df["datetime"].dt.date == selected_date]
+        # === 선택 범위 필터링 ===
+        if isinstance(selected_range, list) and len(selected_range) == 2:
+            start_date, end_date = selected_range
+        else:
+            start_date = end_date = selected_range
     
+        mask = (df["datetime"].dt.date >= start_date) & (df["datetime"].dt.date <= end_date)
+        filtered = df.loc[mask]
+        
         if filtered.empty:
             st.warning("⚠️ 선택한 날짜에 해당하는 예측 데이터가 없습니다.")
         else:
