@@ -10,7 +10,7 @@ from datetime import datetime
 # 페이지 기본 설정
 st.set_page_config(page_title="태양광 발전량 대시보드", page_icon="☀️", layout="wide")
 
-st.title("☀️ 태양광 발전량 대시보드")
+st.title("태양광 발전량 대시보드")
 st.write("나중에 정함")
 
 # 탭 3개 구성
