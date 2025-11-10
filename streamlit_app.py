@@ -68,7 +68,7 @@ with tab2:
                 x="datetime",
                 y="predicted",
                 labels={"datetime": "시간", "predicted_pv": ""},  # ← y축 텍스트 제거
-                title=f"☀️ {start_date} ~ {end_date} PV 예측 발전량",
+                title=f"{start_date} ~ {end_date} PV 예측 발전량",
                 color_discrete_sequence=["orange"]
             )
             
@@ -77,7 +77,7 @@ with tab2:
             
             # 그래프 제목, 폰트, 위치 설정
             fig.update_layout(
-                xaxis_title="시간",
+                xaxis_title=" ",
                 yaxis_title=None,   # ← y축 제목 완전히 제거
                 template="plotly_white",
                 margin=dict(l=40, r=40, t=50, b=40)
@@ -85,11 +85,11 @@ with tab2:
             
             # ← 그래프 내부 왼쪽 위에 텍스트 추가
             fig.add_annotation(
-                text="☀️ 예측 발전량 (W)",  # 표시할 문구
+                text="Predicted_PV (W)",  # 표시할 문구
                 xref="paper", yref="paper",
-                x=0.02, y=0.98,               # 왼쪽 위 위치
+                x=0.02, y=0.90,               # 왼쪽 위 위치
                 showarrow=False,
-                font=dict(size=14, color="orange", family="Arial Bold")
+                font=dict(size=12, color="orange", family="Arial Bold")
             )
             
             st.plotly_chart(fig, use_container_width=True)
