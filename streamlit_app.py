@@ -41,7 +41,7 @@ with tab2:
         default_range = [min(available_dates), max(available_dates)]
     
         selected_range = st.date_input(
-            "📆 보고 싶은 날짜 범위를 선택하세요",
+            "날짜 범위를 선택하세요",
             value=default_range,
             min_value=min(available_dates),
             max_value=max(available_dates)
@@ -149,7 +149,7 @@ with tab3:
             if not valid_temps.empty:
                 latest_temp = valid_temps.iloc[-1]
                 fig.add_annotation(
-                    text=f"🌡️Temperature: {latest_temp:.1f} °C",
+                    text=f"Temperature: {latest_temp:.1f} °C",
                     xref="paper", yref="paper",
                     x=0.01, y=1.05,
                     showarrow=False,
