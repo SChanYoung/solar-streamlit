@@ -4,6 +4,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 import time
+from streamlit_autorefresh import st_autorefresh
+
 
 # Google Drive 파일 ID (예: https://drive.google.com/file/d/📁ID/view?usp=sharing)
 # 페이지 기본 설정
@@ -17,14 +19,10 @@ tab1, tab2, tab3 = st.tabs(["🔴 실시간 발전량 비교", "📈 발전량 �
 
 with tab1:
     st.subheader("🔴 실시간 발전량 탭")
-    st.title("🔆 예측 vs 실시간 PV 발전량 (고정 시간축)")
+    st.title("🔆 예측 vs 실시간 PV 발전량 (고정 시간축, 자동 갱신)")
 
-    # 세션 상태 초기화
-    if "last_update" not in st.session_state:
-        st.session_state.last_update = time.time()
-
-    # 현재 시각과 비교 (5초 경과 시만 새로고침)
-    elapsed = time.time() - st.session_state.last_update
+    # 5초마다 자동 새로고침 (5000ms = 5초)
+    st_autorefresh(interval=5000, key="data_refresh")
 
     try:
         # === 예측 CSV ===
@@ -34,49 +32,47 @@ with tab1:
         pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
 
         # === 실시간 CSV ===
-        live_file_id = "1Z763ZgBE962RTbHK4-iqINUi0M_DLZQn"
+        live_file_id = "1U73SuV6qN7gcxQR3r0Fj3kDe2U9JUuoQ"
         live_url = f"https://drive.google.com/uc?id={live_file_id}"
+
+        # CSV 읽기
         live_df = pd.read_csv(live_url, encoding="utf-8")
+        live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
 
-        if not live_df.empty:
-            live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
+        # === 그래프 생성 ===
+        fig = go.Figure()
 
-            # === 그래프 ===
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(
-                x=pred_df["datetime"],
-                y=pred_df["predicted_pv"],
-                mode="lines",
-                name="예측 발전량",
-                line=dict(color="orange", dash="dot")
-            ))
-            fig.add_trace(go.Scatter(
-                x=live_df["Timestamp"],
-                y=live_df["PV_P (W)"],
-                mode="lines+markers",
-                name="실시간 발전량",
-                line=dict(color="royalblue", width=3)
-            ))
+        # 예측 데이터 (점선)
+        fig.add_trace(go.Scatter(
+            x=pred_df["datetime"],
+            y=pred_df["predicted_pv"],
+            mode="lines",
+            name="예측 발전량",
+            line=dict(color="orange", dash="dot", width=2)
+        ))
 
-            fig.update_layout(
-                template="plotly_white",
-                xaxis_title="시간",
-                yaxis_title="발전량(W)",
-                title="예측 vs 실시간 PV 발전량 (고정 시간축)"
-            )
+        # 실시간 데이터 (실선)
+        fig.add_trace(go.Scatter(
+            x=live_df["Timestamp"],
+            y=live_df["PV_P (W)"],
+            mode="lines+markers",
+            name="실시간 발전량",
+            line=dict(color="royalblue", width=3)
+        ))
 
-            st.plotly_chart(fig, use_container_width=True)
+        fig.update_layout(
+            template="plotly_white",
+            xaxis_title="시간",
+            yaxis_title="발전량 (W)",
+            title="📡 실시간 vs 예측 PV 발전량 (5초 간격 자동 갱신)",
+            legend=dict(yanchor="top", y=1.1, xanchor="left", x=0)
+        )
 
-        # 5초마다 새로고침
-        if elapsed > 5:
-            st.session_state.last_update = time.time()
-            st.rerun()
+        st.plotly_chart(fig, use_container_width=True)
 
     except Exception as e:
         st.warning(f"데이터 오류: {e}")
         st.error(f"⚠️ CSV 읽기 실패: {e}")
-        st.stop()
-
 
     
 
