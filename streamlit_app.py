@@ -19,10 +19,12 @@ with tab1:
     st.subheader("🔴 실시간 발전량 탭")
     st.title("🔆 예측 vs 실시간 PV 발전량 (고정 시간축)")
 
-    # 자동 갱신 (5초마다)
-    st.markdown("<small>5초마다 자동으로 최신 데이터를 불러옵니다.</small>", unsafe_allow_html=True)
-    time.sleep(5)
-    st.rerun()
+    # 세션 상태 초기화
+    if "last_update" not in st.session_state:
+        st.session_state.last_update = time.time()
+
+    # 현재 시각과 비교 (5초 경과 시만 새로고침)
+    elapsed = time.time() - st.session_state.last_update
 
     try:
         # === 예측 CSV ===
@@ -39,7 +41,7 @@ with tab1:
         if not live_df.empty:
             live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
 
-            # 그래프
+            # === 그래프 ===
             fig = go.Figure()
             fig.add_trace(go.Scatter(
                 x=pred_df["datetime"],
@@ -64,6 +66,11 @@ with tab1:
             )
 
             st.plotly_chart(fig, use_container_width=True)
+
+        # 5초마다 새로고침
+        if elapsed > 5:
+            st.session_state.last_update = time.time()
+            st.rerun()
 
     except Exception as e:
         st.warning(f"데이터 오류: {e}")
