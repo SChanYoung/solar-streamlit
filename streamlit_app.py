@@ -32,48 +32,29 @@ with tab1:
         live_file_id = "1U73SuV6qN7gcxQR3r0Fj3kDe2U9JUuoQ"
         live_url = f"https://drive.google.com/uc?id={live_file_id}"
 
-        # === 그래프 초기화 ===
+        # 초기 그래프
         fig = go.Figure()
-
-        # 예측선 (고정)
         fig.add_trace(go.Scatter(
-            x=pred_df["datetime"],
-            y=pred_df["predicted_pv"],
-            mode="lines",
-            name="예측 발전량",
+            x=pred_df["datetime"], y=pred_df["predicted_pv"],
+            mode="lines", name="예측 발전량",
             line=dict(color="orange", dash="dot")
         ))
-
-        # 실시간선 (업데이트용)
-        real_trace = go.Scatter(
-            x=[], y=[],
-            mode="lines+markers",
-            name="실시간 발전량",
-            line=dict(color="royalblue", width=3)
-        )
-        fig.add_trace(real_trace)
-
-        fig.update_layout(
-            template="plotly_white",
-            xaxis_title="시간",
-            yaxis_title="발전량 (W)",
-            title="예측 vs 실시간 PV 발전량",
-            autosize=True
-        )
-
-        chart = st.empty()
-
-        # === 실시간 갱신 루프 ===
-        for _ in range(200):
-            live_df = pd.read_csv(live_url, encoding='utf-8')
+        fig.add_trace(go.Scatter(
+            x=[], y=[], mode="lines+markers",
+            name="실시간 발전량", line=dict(color="royalblue", width=3)
+        ))
+        fig.update_layout(template="plotly_white", xaxis_title="시간", yaxis_title="발전량(W)")
+    
+        chart = st.empty()  # 그래프 자리 확보
+    
+        # 루프 시작 (페이지 전체 새로고침 없이)
+        while True:
+            live_df = pd.read_csv(live_url, encoding="utf-8")
             if not live_df.empty:
                 live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
                 fig.data[1].x = live_df["Timestamp"]
-                fig.data[1].y = live_df["PV_P (W)"]
-
-                # 🔹 고정 축 유지, 중복 ID 방지
-                chart.plotly_chart(fig, use_container_width=True, key=f"live_chart_{int(time.time())}")
-
+                fig.data[1].y = live_df["P (W)"]
+                chart.plotly_chart(fig, use_container_width=True, key="live_chart")
             time.sleep(5)
 
     except Exception as e:
