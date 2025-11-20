@@ -35,7 +35,7 @@ with tab1:
          # === 예측 CSV ===
         pred_file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"
         pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
-        pred_df = pd.read_csv(pred_url)
+        pred_df = pd.read_csv(pred_url, encoding='utf-8', errors='ignore')
         pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
 
         # === 실시간 CSV ===
