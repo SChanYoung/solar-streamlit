@@ -21,8 +21,8 @@ with tab1:
     st.write("여기는 실시간 발전량 데이터를 표시할 영역입니다.")
     st.title("🔆 예측 vs 실시간 PV 발전량 (고정 시간축)")
 
-    try :
-         # === 예측 CSV ===
+    try:
+        # === 예측 CSV ===
         pred_file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"
         pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
         pred_df = pd.read_csv(pred_url, encoding='utf-8')
@@ -32,8 +32,10 @@ with tab1:
         live_file_id = "1U73SuV6qN7gcxQR3r0Fj3kDe2U9JUuoQ"
         live_url = f"https://drive.google.com/uc?id={live_file_id}"
 
+        # === 그래프 초기화 ===
         fig = go.Figure()
-        # 예측선
+
+        # 예측선 (고정)
         fig.add_trace(go.Scatter(
             x=pred_df["datetime"],
             y=pred_df["predicted_pv"],
@@ -41,7 +43,8 @@ with tab1:
             name="예측 발전량",
             line=dict(color="orange", dash="dot")
         ))
-        # 실시간선
+
+        # 실시간선 (업데이트용)
         real_trace = go.Scatter(
             x=[], y=[],
             mode="lines+markers",
@@ -49,22 +52,34 @@ with tab1:
             line=dict(color="royalblue", width=3)
         )
         fig.add_trace(real_trace)
-        fig.update_layout(template="plotly_white")
+
+        fig.update_layout(
+            template="plotly_white",
+            xaxis_title="시간",
+            yaxis_title="발전량 (W)",
+            title="예측 vs 실시간 PV 발전량",
+            autosize=True
+        )
+
         chart = st.empty()
 
+        # === 실시간 갱신 루프 ===
         for _ in range(200):
             live_df = pd.read_csv(live_url, encoding='utf-8')
-            live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
-            fig.data[1].x = live_df["Timestamp"]
-            fig.data[1].y = live_df["PV_P (W)"]
-            chart.plotly_chart(fig, use_container_width=True)
+            if not live_df.empty:
+                live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
+                fig.data[1].x = live_df["Timestamp"]
+                fig.data[1].y = live_df["P (W)"]
+
+                # 🔹 고정 축 유지, 중복 ID 방지
+                chart.plotly_chart(fig, use_container_width=True, key=f"live_chart_{int(time.time())}")
+
             time.sleep(5)
 
     except Exception as e:
         st.warning(f"데이터 오류: {e}")
         st.error(f"⚠️ CSV 읽기 실패: {e}")
         st.stop()
-    
 
     
 
