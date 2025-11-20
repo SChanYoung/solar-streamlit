@@ -17,60 +17,6 @@ st.write("나중에 정함")
 # 탭 3개 구성
 tab1, tab2, tab3 = st.tabs(["🔴 실시간 발전량 비교", "📈 발전량 예측", "🌤️ 기상 현황"])
 
-with tab1:
-    st.subheader("🔴 실시간 발전량 탭")
-    st.title("🔆 예측 vs 실시간 PV 발전량 (고정 시간축, 실시간 반영)")
-
-    # === 예측 CSV ===
-    pred_file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"
-    pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
-    pred_df = pd.read_csv(pred_url, encoding='utf-8')
-    pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
-
-    # === 실시간 CSV ===
-    live_file_id = "1Z763ZgBE962RTbHK4-iqINUi0M_DLZQn"
-    live_url = f"https://drive.google.com/uc?id={live_file_id}"
-
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=pred_df["datetime"],
-        y=pred_df["predicted_pv"],
-        mode="lines",
-        name="예측 발전량",
-        line=dict(color="orange", dash="dot", width=2)
-    ))
-    fig.add_trace(go.Scatter(
-        x=[], y=[],
-        mode="lines+markers",
-        name="실시간 발전량",
-        line=dict(color="royalblue", width=3)
-    ))
-    fig.update_layout(
-        template="plotly_white",
-        xaxis_title="시간",
-        yaxis_title="발전량 (W)",
-        title="📡 실시간 vs 예측 PV 발전량 (5초 간격 자동 갱신)",
-        legend=dict(yanchor="top", y=1.1, xanchor="left", x=0)
-    )
-
-    chart = st.empty()
-
-    while True:
-        try:
-            live_df = pd.read_csv(live_url, encoding="utf-8")
-            if not live_df.empty:
-                live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
-                fig.data[1].x = live_df["Timestamp"]
-                fig.data[1].y = live_df["PV_P (W)"]
-
-                # 🔑 key에 랜덤값 추가로 중복 방지
-                chart.plotly_chart(fig, use_container_width=True, key=f"chart_{random.randint(0,99999)}")
-                st.caption(f"⏱ 최근 갱신: {time.strftime('%H:%M:%S')}")
-        except Exception as e:
-            st.warning(f"⚠️ 데이터 오류: {e}")
-
-        time.sleep(5)
-
 
 with tab2:
     st.subheader("📈 발전량 예측")
@@ -223,3 +169,59 @@ with tab3:
     
     except Exception as e:
         st.error(f"CSV 불러오기 실패: {e}")
+
+with tab1:
+    st.subheader("🔴 실시간 발전량 탭")
+    st.title("🔆 예측 vs 실시간 PV 발전량 (고정 시간축, 실시간 반영)")
+
+    # === 예측 CSV ===
+    pred_file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"
+    pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
+    pred_df = pd.read_csv(pred_url, encoding='utf-8')
+    pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
+
+    # === 실시간 CSV ===
+    live_file_id = "1Z763ZgBE962RTbHK4-iqINUi0M_DLZQn"
+    live_url = f"https://drive.google.com/uc?id={live_file_id}"
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=pred_df["datetime"],
+        y=pred_df["predicted_pv"],
+        mode="lines",
+        name="예측 발전량",
+        line=dict(color="orange", dash="dot", width=2)
+    ))
+    fig.add_trace(go.Scatter(
+        x=[], y=[],
+        mode="lines+markers",
+        name="실시간 발전량",
+        line=dict(color="royalblue", width=3)
+    ))
+    fig.update_layout(
+        template="plotly_white",
+        xaxis_title="시간",
+        yaxis_title="발전량 (W)",
+        title="📡 실시간 vs 예측 PV 발전량 (5초 간격 자동 갱신)",
+        legend=dict(yanchor="top", y=1.1, xanchor="left", x=0)
+    )
+
+    chart = st.empty()
+
+    while True:
+        try:
+            live_df = pd.read_csv(live_url, encoding="utf-8")
+            if not live_df.empty:
+                live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
+                fig.data[1].x = live_df["Timestamp"]
+                fig.data[1].y = live_df["PV_P (W)"]
+
+                # 🔑 key에 랜덤값 추가로 중복 방지
+                chart.plotly_chart(fig, use_container_width=True, key=f"chart_{random.randint(0,99999)}")
+                st.caption(f"⏱ 최근 갱신: {time.strftime('%H:%M:%S')}")
+        except Exception as e:
+            st.warning(f"⚠️ 데이터 오류: {e}")
+
+        time.sleep(5)
+
+
