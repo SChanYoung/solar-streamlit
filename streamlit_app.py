@@ -171,7 +171,7 @@ with tab3:
         st.error(f"CSV 불러오기 실패: {e}")
 
 with tab1:
-    st.subheader("🔴 실시간 발전량 탭")
+    st.subheader("🔴 실시간 발전량 탭 (5초 간격 자동 업데이트)")
     st.title("🔆 예측 vs 실시간 PV 발전량 (고정 시간축, 실시간 반영)")
 
     # === 예측 CSV ===
@@ -184,6 +184,21 @@ with tab1:
     live_file_id = "16DNu5OcH7bAZKnmcavjU4H2lIrOUyfV1"
     live_url = f"https://drive.google.com/uc?id={live_file_id}"
 
+    # === 상태 저장용 ===
+    if "paused" not in st.session_state:
+        st.session_state.paused = False
+
+    # 버튼 UI
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        if st.session_state.paused:
+            if st.button("▶ 재시작"):
+                st.session_state.paused = False
+        else:
+            if st.button("⏸ 일시정지"):
+                st.session_state.paused = True
+
+    # 그래프 기본 설정
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=pred_df["datetime"],
@@ -209,19 +224,21 @@ with tab1:
     chart = st.empty()
 
     while True:
-        try:
-            live_df = pd.read_csv(live_url, encoding="utf-8")
-            if not live_df.empty:
-                live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
-                fig.data[1].x = live_df["Timestamp"]
-                fig.data[1].y = live_df["PV_P (W)"]
+        if not st.session_state.paused:
+            try:
+                live_df = pd.read_csv(live_url, encoding="utf-8")
+                if not live_df.empty:
+                    live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
+                    fig.data[1].x = live_df["Timestamp"]
+                    fig.data[1].y = live_df["PV_P (W)"]
 
-                # 🔑 key에 랜덤값 추가로 중복 방지
-                chart.plotly_chart(fig, use_container_width=True, key=f"chart_{random.randint(0,99999)}")
-                st.caption(f"⏱ 최근 갱신: {time.strftime('%H:%M:%S')}")
-        except Exception as e:
-            st.warning(f"⚠️ 데이터 오류: {e}")
-
+                    chart.plotly_chart(fig, use_container_width=True, key=f"chart_{random.randint(0,99999)}")
+                    st.caption(f"⏱ 최근 갱신: {time.strftime('%H:%M:%S')}")
+            except Exception as e:
+                st.warning(f"⚠️ 데이터 오류: {e}")
+        else:
+            st.info("⏸ 데이터 갱신이 일시정지되었습니다.")
+        
         time.sleep(5)
 
 
