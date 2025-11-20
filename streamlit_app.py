@@ -25,7 +25,7 @@ with tab1:
          # === 예측 CSV ===
         pred_file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"
         pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
-        pred_df = pd.read_csv(pred_url, encoding='ISO-8859-1')
+        pred_df = pd.read_csv(pred_url, encoding='utf-8')
         pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
 
         # === 실시간 CSV ===
@@ -53,7 +53,7 @@ with tab1:
         chart = st.empty()
 
         for _ in range(200):
-            live_df = pd.read_csv(live_url, encoding='ISO-8859-1')
+            live_df = pd.read_csv(live_url, encoding='utf-8')
             live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
             fig.data[1].x = live_df["Timestamp"]
             fig.data[1].y = live_df["P (W)"]
@@ -62,6 +62,8 @@ with tab1:
 
     except Exception as e:
         st.warning(f"데이터 오류: {e}")
+        st.error(f"⚠️ CSV 읽기 실패: {e}")
+        st.stop()
     
 
     
