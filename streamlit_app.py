@@ -4,6 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 import time
+import random
 
 
 # Google Drive 파일 ID (예: https://drive.google.com/file/d/📁ID/view?usp=sharing)
@@ -30,7 +31,6 @@ with tab1:
     live_file_id = "1Z763ZgBE962RTbHK4-iqINUi0M_DLZQn"
     live_url = f"https://drive.google.com/uc?id={live_file_id}"
 
-    # 그래프 틀 준비
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=pred_df["datetime"],
@@ -49,13 +49,12 @@ with tab1:
         template="plotly_white",
         xaxis_title="시간",
         yaxis_title="발전량 (W)",
-        title="📡 실시간 vs 예측 PV 발전량",
+        title="📡 실시간 vs 예측 PV 발전량 (5초 간격 자동 갱신)",
         legend=dict(yanchor="top", y=1.1, xanchor="left", x=0)
     )
 
-    chart = st.empty()  # 그래프 자리 비워둠
+    chart = st.empty()
 
-    # === 자동 업데이트 루프 ===
     while True:
         try:
             live_df = pd.read_csv(live_url, encoding="utf-8")
@@ -63,13 +62,15 @@ with tab1:
                 live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
                 fig.data[1].x = live_df["Timestamp"]
                 fig.data[1].y = live_df["PV_P (W)"]
-                chart.plotly_chart(fig, use_container_width=True)
+
+                # 🔑 key에 랜덤값 추가로 중복 방지
+                chart.plotly_chart(fig, use_container_width=True, key=f"chart_{random.randint(0,99999)}")
                 st.caption(f"⏱ 최근 갱신: {time.strftime('%H:%M:%S')}")
         except Exception as e:
             st.warning(f"⚠️ 데이터 오류: {e}")
 
-        time.sleep(5)  # 5초마다 갱신
-    
+        time.sleep(5)
+
 
 with tab2:
     st.subheader("📈 발전량 예측")
