@@ -37,7 +37,7 @@ with tab1:
         pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
 
         # === 실시간 CSV ===
-        live_file_id = "1U73SuV6qN7gcxQR3r0Fj3kDe2U9JUuoQ"
+        live_file_id = "1Z763ZgBE962RTbHK4-iqINUi0M_DLZQn"
         live_url = f"https://drive.google.com/uc?id={live_file_id}"
 
         live_df = pd.read_csv(live_url, encoding="utf-8")
