@@ -21,21 +21,11 @@ with tab1:
     st.write("여기는 실시간 발전량 데이터를 표시할 영역입니다.")
     st.title("🔆 예측 vs 실시간 PV 발전량 (고정 시간축)")
 
-    # === 예측 CSV ===
-    pred_file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"   # 👉 예측 CSV의 드라이브 file id
-    pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
-    pred_df = pd.read_csv(pred_url)
-    pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
-    
-    # === 실시간 CSV ===
-    live_file_id = "1XyZ1234LiveFileID567"  # 👉 주피터에서 쓰는 실시간 CSV file id
-    live_url = f"https://drive.google.com/uc?id={live_file_id}"
-
     try :
          # === 예측 CSV ===
         pred_file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"
         pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
-        pred_df = pd.read_csv(pred_url, encoding='utf-8', errors='ignore')
+        pred_df = pd.read_csv(pred_url, encoding='utf-8')
         pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
 
         # === 실시간 CSV ===
