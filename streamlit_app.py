@@ -22,7 +22,7 @@ with tab1:
     # 자동 갱신 (5초마다)
     st.markdown("<small>5초마다 자동으로 최신 데이터를 불러옵니다.</small>", unsafe_allow_html=True)
     time.sleep(5)
-    st.experimental_rerun()
+    st.rerun()
 
     try:
         # === 예측 CSV ===
