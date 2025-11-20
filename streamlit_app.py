@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
-
+import time
 
 
 # Google Drive 파일 ID (예: https://drive.google.com/file/d/📁ID/view?usp=sharing)
@@ -19,6 +19,62 @@ tab1, tab2, tab3 = st.tabs(["🔴 실시간 발전량 비교", "📈 발전량 �
 with tab1:
     st.subheader("🔴 실시간 발전량 탭")
     st.write("여기는 실시간 발전량 데이터를 표시할 영역입니다.")
+    st.title("🔆 예측 vs 실시간 PV 발전량 (고정 시간축)")
+
+    # === 예측 CSV ===
+    pred_file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"   # 👉 예측 CSV의 드라이브 file id
+    pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
+    pred_df = pd.read_csv(pred_url)
+    pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
+    
+    # === 실시간 CSV ===
+    live_file_id = "1XyZ1234LiveFileID567"  # 👉 주피터에서 쓰는 실시간 CSV file id
+    live_url = f"https://drive.google.com/uc?id={live_file_id}"
+
+    try :
+         # === 예측 CSV ===
+        pred_file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"
+        pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
+        pred_df = pd.read_csv(pred_url)
+        pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
+
+        # === 실시간 CSV ===
+        live_file_id = "실시간CSV_ID"
+        live_url = f"https://drive.google.com/uc?id={live_file_id}"
+
+        fig = go.Figure()
+        # 예측선
+        fig.add_trace(go.Scatter(
+            x=pred_df["datetime"],
+            y=pred_df["predicted_pv"],
+            mode="lines",
+            name="예측 발전량",
+            line=dict(color="orange", dash="dot")
+        ))
+        # 실시간선
+        real_trace = go.Scatter(
+            x=[], y=[],
+            mode="lines+markers",
+            name="실시간 발전량",
+            line=dict(color="royalblue", width=3)
+        )
+        fig.add_trace(real_trace)
+        fig.update_layout(template="plotly_white")
+        chart = st.empty()
+
+        for _ in range(200):
+            live_df = pd.read_csv(live_url)
+            live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
+            fig.data[1].x = live_df["Timestamp"]
+            fig.data[1].y = live_df["P (W)"]
+            chart.plotly_chart(fig, use_container_width=True)
+            time.sleep(5)
+
+    except Exception as e:
+        st.warning(f"데이터 오류: {e}")
+    
+
+    
 
 with tab2:
     st.subheader("📈 발전량 예측")
