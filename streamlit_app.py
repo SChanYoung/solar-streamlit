@@ -69,7 +69,7 @@ with tab1:
             if not live_df.empty:
                 live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
                 fig.data[1].x = live_df["Timestamp"]
-                fig.data[1].y = live_df["P (W)"]
+                fig.data[1].y = live_df["PV_P (W)"]
 
                 # 🔹 고정 축 유지, 중복 ID 방지
                 chart.plotly_chart(fig, use_container_width=True, key=f"live_chart_{int(time.time())}")
