@@ -4,7 +4,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 import time
-from streamlit_autorefresh import st_autorefresh
 
 
 # Google Drive 파일 ID (예: https://drive.google.com/file/d/📁ID/view?usp=sharing)
@@ -21,8 +20,14 @@ with tab1:
     st.subheader("🔴 실시간 발전량 탭")
     st.title("🔆 예측 vs 실시간 PV 발전량 (고정 시간축, 자동 갱신)")
 
-    # 5초마다 자동 새로고침 (5000ms = 5초)
-    st_autorefresh(interval=5000, key="data_refresh")
+    # 세션상태로 타이머 관리
+    if "last_refresh" not in st.session_state:
+        st.session_state.last_refresh = time.time()
+
+    # 5초마다 재실행
+    if time.time() - st.session_state.last_refresh > 5:
+        st.session_state.last_refresh = time.time()
+        st.experimental_rerun()
 
     try:
         # === 예측 CSV ===
@@ -35,31 +40,21 @@ with tab1:
         live_file_id = "1U73SuV6qN7gcxQR3r0Fj3kDe2U9JUuoQ"
         live_url = f"https://drive.google.com/uc?id={live_file_id}"
 
-        # CSV 읽기
         live_df = pd.read_csv(live_url, encoding="utf-8")
         live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
 
-        # === 그래프 생성 ===
+        # === 그래프 ===
         fig = go.Figure()
-
-        # 예측 데이터 (점선)
         fig.add_trace(go.Scatter(
-            x=pred_df["datetime"],
-            y=pred_df["predicted_pv"],
-            mode="lines",
-            name="예측 발전량",
+            x=pred_df["datetime"], y=pred_df["predicted_pv"],
+            mode="lines", name="예측 발전량",
             line=dict(color="orange", dash="dot", width=2)
         ))
-
-        # 실시간 데이터 (실선)
         fig.add_trace(go.Scatter(
-            x=live_df["Timestamp"],
-            y=live_df["PV_P (W)"],
-            mode="lines+markers",
-            name="실시간 발전량",
+            x=live_df["Timestamp"], y=live_df["PV_P (W)"],
+            mode="lines+markers", name="실시간 발전량",
             line=dict(color="royalblue", width=3)
         ))
-
         fig.update_layout(
             template="plotly_white",
             xaxis_title="시간",
@@ -69,11 +64,11 @@ with tab1:
         )
 
         st.plotly_chart(fig, use_container_width=True)
+        st.caption("🔁 5초마다 자동 갱신 중...")
 
     except Exception as e:
         st.warning(f"데이터 오류: {e}")
         st.error(f"⚠️ CSV 읽기 실패: {e}")
-
     
 
 with tab2:
