@@ -4,8 +4,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 import time
-from streamlit_autorefresh import st_autorefresh
-
 
 # Google Drive 파일 ID (예: https://drive.google.com/file/d/📁ID/view?usp=sharing)
 # 페이지 기본 설정
@@ -21,8 +19,10 @@ with tab1:
     st.subheader("🔴 실시간 발전량 탭")
     st.title("🔆 예측 vs 실시간 PV 발전량 (고정 시간축)")
 
-    # 🔁 5초마다 자동 새로고침
-    count = st_autorefresh(interval=5000, key="data_refresh")
+    # 자동 갱신 (5초마다)
+    st.markdown("<small>5초마다 자동으로 최신 데이터를 불러옵니다.</small>", unsafe_allow_html=True)
+    time.sleep(5)
+    st.experimental_rerun()
 
     try:
         # === 예측 CSV ===
@@ -39,10 +39,8 @@ with tab1:
         if not live_df.empty:
             live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
 
-            # === 그래프 생성 ===
+            # 그래프
             fig = go.Figure()
-
-            # 예측선
             fig.add_trace(go.Scatter(
                 x=pred_df["datetime"],
                 y=pred_df["predicted_pv"],
@@ -50,8 +48,6 @@ with tab1:
                 name="예측 발전량",
                 line=dict(color="orange", dash="dot")
             ))
-
-            # 실시간선
             fig.add_trace(go.Scatter(
                 x=live_df["Timestamp"],
                 y=live_df["PV_P (W)"],
@@ -64,8 +60,7 @@ with tab1:
                 template="plotly_white",
                 xaxis_title="시간",
                 yaxis_title="발전량(W)",
-                title="예측 vs 실시간 PV 발전량 (고정 시간축)",
-                autosize=True
+                title="예측 vs 실시간 PV 발전량 (고정 시간축)"
             )
 
             st.plotly_chart(fig, use_container_width=True)
