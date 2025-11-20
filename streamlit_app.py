@@ -181,7 +181,7 @@ with tab1:
     pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
 
     # === 실시간 CSV ===
-    live_file_id = "1Z763ZgBE962RTbHK4-iqINUi0M_DLZQn"
+    live_file_id = "16DNu5OcH7bAZKnmcavjU4H2lIrOUyfV1"
     live_url = f"https://drive.google.com/uc?id={live_file_id}"
 
     fig = go.Figure()
