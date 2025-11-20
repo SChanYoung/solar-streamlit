@@ -56,7 +56,7 @@ with tab1:
             live_df = pd.read_csv(live_url, encoding='utf-8')
             live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
             fig.data[1].x = live_df["Timestamp"]
-            fig.data[1].y = live_df["P (W)"]
+            fig.data[1].y = live_df["PV_P(W)"]
             chart.plotly_chart(fig, use_container_width=True)
             time.sleep(5)
 
