@@ -246,6 +246,6 @@ with tab1:
         else:
             st.info("⏸ 데이터 갱신이 일시정지되었습니다.")
         
-        time.sleep(300)  # 5분 단위 주기
+        time.sleep(15)  # 5분 단위 주기
 
 
