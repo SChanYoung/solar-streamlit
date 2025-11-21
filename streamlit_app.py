@@ -75,7 +75,8 @@ with tab2:
             # 그래프 제목, 폰트, 위치 설정
             fig.update_layout(
                 xaxis_title=" ",
-                yaxis_title=None,   # ← y축 제목 완전히 제거
+                yaxis_title="발전량 (W)",
+                # yaxis_title=None,   # ← y축 제목 완전히 제거
                 template="plotly_white",
                 margin=dict(l=40, r=40, t=50, b=40)
             )
@@ -170,7 +171,7 @@ with tab3:
         st.error(f"CSV 불러오기 실패: {e}")
 
 with tab1:
-    st.subheader("🔴 실시간 발전량 비교)")
+    st.subheader("🔴 실시간 발전량 비교")
     
 
     # === 예측 CSV ===
