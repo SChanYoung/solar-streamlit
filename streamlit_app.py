@@ -175,14 +175,14 @@ with tab1:
     st.title("🔆 예측 vs 실시간 PV 발전량 (5분 평균값 기준)")
 
     # === 예측 CSV ===
-    pred_file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"
+    pred_file_id = "16q9rjxzuZy7UKx8-ySnynqlJ0O4r9Asu"
     pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
     pred_df = pd.read_csv(pred_url, encoding='utf-8')
     pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
     pred_df.set_index("datetime", inplace=True)
 
     # === 실시간 CSV ===
-    live_file_id = "16DNu5OcH7bAZKnmcavjU4H2lIrOUyfV1"
+    live_file_id = "1s8lK9ectg-f7rYBjB6KooZbtIB0NEW0P"
     live_url = f"https://drive.google.com/uc?id={live_file_id}"
 
     # === 세션 상태 저장 ===
