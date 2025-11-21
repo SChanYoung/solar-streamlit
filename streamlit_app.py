@@ -12,7 +12,7 @@ import random
 st.set_page_config(page_title="태양광 발전량 대시보드", page_icon="☀️", layout="wide")
 
 st.title("태양광 발전량 대시보드")
-st.write("나중에 정함")
+# st.write("나중에 정함")
 
 # 탭 3개 구성
 tab1, tab2, tab3 = st.tabs(["🔴 실시간 발전량 비교", "📈 발전량 예측", "🌤️ 기상 현황"])
@@ -66,7 +66,6 @@ with tab2:
                 x="datetime",
                 y="predicted",
                 labels={"datetime": "시간", "predicted_pv": ""},  # ← y축 텍스트 제거
-                title=f"{start_date} ~ {end_date} PV 예측 발전량",
                 color_discrete_sequence=["orange"]
             )
             
@@ -171,8 +170,8 @@ with tab3:
         st.error(f"CSV 불러오기 실패: {e}")
 
 with tab1:
-    st.subheader("🔴 실시간 발전량 탭 (5분 단위 평균 업데이트)")
-    st.title("🔆 예측 vs 실시간 PV 발전량 (5분 평균값 기준)")
+    st.subheader("🔴 실시간 발전량 비교)")
+    
 
     # === 예측 CSV ===
     pred_file_id = "16q9rjxzuZy7UKx8-ySnynqlJ0O4r9Asu"
@@ -216,9 +215,7 @@ with tab1:
     ))
     fig.update_layout(
         template="plotly_white",
-        xaxis_title="시간",
         yaxis_title="발전량 (W)",
-        title="📡 실시간 vs 예측 PV 발전량 (5분 평균)",
         legend=dict(yanchor="top", y=1.1, xanchor="left", x=0)
     )
 
@@ -234,13 +231,13 @@ with tab1:
                     live_df.set_index("Timestamp", inplace=True)
 
                     # 🔹 5분 단위 평균
-                    resampled = live_df["PV_P (W)"].resample("15S").mean().reset_index()
+                    resampled = live_df["PV_P (W)"].resample("5T").mean().reset_index()
 
                     # 그래프 갱신
                     fig.data[1].x = resampled["Timestamp"]
                     fig.data[1].y = resampled["PV_P (W)"]
                     chart.plotly_chart(fig, use_container_width=True, key=f"chart_{random.randint(0,99999)}")
-                    st.caption(f"⏱ 최근 갱신: {time.strftime('%H:%M:%S')} (5분 평균)")
+                    
             except Exception as e:
                 st.warning(f"⚠️ 데이터 오류: {e}")
         else:
