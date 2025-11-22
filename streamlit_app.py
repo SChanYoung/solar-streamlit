@@ -233,7 +233,7 @@ with tab1:
                     live_df.set_index("Timestamp", inplace=True)
 
                     # 🔹 5분 단위 평균
-                    resampled = live_df["PV_P (W)"].resample("15S").mean().reset_index()
+                    resampled = live_df["PV_P (W)"].resample("1T").mean().reset_index()
 
                     # 그래프 갱신
                     fig.data[1].x = resampled["Timestamp"]
