@@ -33,6 +33,7 @@ with tab2:
         }, inplace=True)
     
         df["datetime"] = pd.to_datetime(df["datetime"], errors="coerce")
+        df = df.dropna(subset=["datetime"])  # NaT 행 제거
     
         # === 날짜 범위 선택 ===
         available_dates = sorted(df["datetime"].dt.date.unique())
