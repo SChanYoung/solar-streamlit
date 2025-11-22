@@ -20,7 +20,7 @@ tab1, tab2, tab3 = st.tabs(["🔴 실시간 발전량 비교", "📈 발전량 �
 
 with tab2:
     st.subheader("📈 발전량 예측")
-    file_id = "10YHBoan8Ej3CpUJvcFe3npx4r1ZFvZ7Y"  # 👉 교체하세요
+    file_id = "1oXtwoKlvHTLvUMCG-ujigpiKw4w0kLnC"  # 👉 교체하세요
     url = f"https://drive.google.com/uc?id={file_id}"
     
     try:
@@ -175,7 +175,7 @@ with tab1:
     
 
     # === 예측 CSV ===
-    pred_file_id = "16q9rjxzuZy7UKx8-ySnynqlJ0O4r9Asu"
+    pred_file_id = "1BgS87RxvACPnHNnVOw5nXFdRiegsve43"
     pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
     pred_df = pd.read_csv(pred_url, encoding='utf-8')
     pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
