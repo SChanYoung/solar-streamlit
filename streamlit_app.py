@@ -182,7 +182,7 @@ with tab1:
     pred_df.set_index("datetime", inplace=True)
 
     # === 실시간 CSV ===
-    live_file_id = "1s8lK9ectg-f7rYBjB6KooZbtIB0NEW0P"
+    live_file_id = "1vydHZnOWjXRni2FwQ-mLwy3BQm1-I6Ui"
     live_url = f"https://drive.google.com/uc?id={live_file_id}"
 
     # === 세션 상태 저장 ===
@@ -232,7 +232,7 @@ with tab1:
                     live_df.set_index("Timestamp", inplace=True)
 
                     # 🔹 5분 단위 평균
-                    resampled = live_df["PV_P (W)"].resample("5T").mean().reset_index()
+                    resampled = live_df["PV_P (W)"].resample("15S").mean().reset_index()
 
                     # 그래프 갱신
                     fig.data[1].x = resampled["Timestamp"]
