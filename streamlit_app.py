@@ -176,7 +176,7 @@ with tab1:
     
 
     # === 예측 CSV ===
-    pred_file_id = "1BgS87RxvACPnHNnVOw5nXFdRiegsve43"
+    pred_file_id = "1cW3yCXvcK3E6hD5qAeLGJqiVhMO3_VF0"
     pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
     pred_df = pd.read_csv(pred_url, encoding='utf-8')
     pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
@@ -233,7 +233,7 @@ with tab1:
                     live_df.set_index("Timestamp", inplace=True)
 
                     # 🔹 5분 단위 평균
-                    resampled = live_df["PV_P (W)"].resample("1T").mean().reset_index()
+                    resampled = live_df["PV_P (W)"].resample("5T").mean().reset_index()
 
                     # 그래프 갱신
                     fig.data[1].x = resampled["Timestamp"]
@@ -245,6 +245,6 @@ with tab1:
         else:
             st.info("⏸ 데이터 갱신이 일시정지되었습니다.")
         
-        time.sleep(15)  # 5분 단위 주기
+        time.sleep(60)  # 5분 단위 주기
 
 
