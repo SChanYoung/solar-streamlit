@@ -206,13 +206,13 @@ with tab1:
         x=pred_df.index,
         y=pred_df["predicted_pv"],
         mode="lines",
-        name="예측 발전량 (5분 단위)",
+        name="예측 발전량",
         line=dict(color="orange", dash="dot", width=2)
     ))
     fig.add_trace(go.Scatter(
         x=[], y=[],
         mode="lines+markers",
-        name="실시간 평균 발전량 (5분 단위)",
+        name="실시간 평균 발전량",
         line=dict(color="royalblue", width=3)
     ))
     fig.update_layout(
