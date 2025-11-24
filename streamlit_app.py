@@ -176,7 +176,7 @@ with tab1:
     
 
     # === 예측 CSV ===
-    pred_file_id = "1cW3yCXvcK3E6hD5qAeLGJqiVhMO3_VF0"
+    pred_file_id = "1mS2yXbPP6gquar7E_K-85xT6L9UcdPbV"
     pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
     pred_df = pd.read_csv(pred_url, encoding='utf-8')
     pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
