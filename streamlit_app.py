@@ -222,7 +222,7 @@ with tab1:
         template="plotly_white",
         yaxis_title="발전량 (W)",
         legend=dict(yanchor="top", y=1.1, xanchor="left", x=0),
-        height=650
+        height=550
     )
 
     chart = st.empty()
