@@ -210,14 +210,14 @@ with tab1:
         mode="lines",
         name="예측 발전량",
         line=dict(color="orange", dash="dot", width=2),
-        marker=dict(size=3)
+        
     ))
     # 실시간선
     fig.add_trace(go.Scatter(
         x=[], y=[],
-        mode="lines+markers",
+        mode="lines",
         name="실시간 발전량",
-        line=dict(color="royalblue", width=2)
+        line=dict(color="royalblue", dash='dot', width=2)
     ))
     fig.update_layout(
         template="plotly_white",
