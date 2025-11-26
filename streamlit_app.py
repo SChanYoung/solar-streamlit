@@ -209,7 +209,8 @@ with tab1:
         y=pred_df["predicted_pv"],
         mode="lines",
         name="예측 발전량",
-        line=dict(color="orange", dash="dot", width=2)
+        line=dict(color="orange", dash="dot", width=2),
+        marker=dict(size=3)
     ))
     # 실시간선
     fig.add_trace(go.Scatter(
