@@ -215,9 +215,10 @@ with tab1:
     # 실시간선
     fig.add_trace(go.Scatter(
         x=[], y=[],
-        mode="lines",
+        mode="lines + markers",
         name="실시간 발전량",
-        line=dict(color="royalblue", dash='dot', width=2)
+        line=dict(color="royalblue", width=2),
+        marker=dict(size=8, color="royalblue", opacity=1),
     ))
     fig.update_layout(
         template="plotly_white",
