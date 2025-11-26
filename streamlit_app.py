@@ -241,7 +241,7 @@ with tab1:
                     cutoff_time = latest_time - pd.Timedelta(minutes=5)
                     
                     fixed_df = live_df[live_df["Timestamp"] < cutoff_time]
-                    resampled = fixed_df["PV_P (W)"].resample("1T").mean().reset_index()
+                    resampled = fixed_df["PV_P (W)"].resample("5T").mean().reset_index()
 
                     # 그래프 갱신
                     fig.data[1].x = resampled["Timestamp"]
@@ -253,6 +253,6 @@ with tab1:
         else:
             st.info("⏸ 데이터 갱신이 일시정지되었습니다.")
         
-        time.sleep(60)  # 5분 단위 주기
+        time.sleep(300)  # 5분 단위 주기
 
 
