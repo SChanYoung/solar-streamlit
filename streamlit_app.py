@@ -187,8 +187,10 @@ with tab1:
     live_file_id = "1Jh9p9O5H1SBtY8uIC8KvAo3aiOXRXMi6"
     live_url = f"https://drive.google.com/uc?id={live_file_id}"
     live_df_full = pd.read_csv(live_url, encoding="utf-8")
+    live_df_full["Timestamp"] = pd.to_datetime(live_df_full["Timestamp"], errors="coerce")
+    live_df_full = live_df_full.dropna(subset=["Timestamp"])
     live_df_full["Timestamp"] = live_df_full["Timestamp"].dt.strftime("%H:%M:%S")
-    live_df_full["Timestamp"] = pd.to_datetime(live_df_full["Timestamp"])
+
 
     # === 세션 상태 ===
     if "paused" not in st.session_state:
