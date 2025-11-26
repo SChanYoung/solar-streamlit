@@ -178,13 +178,15 @@ with tab1:
     pred_file_id = "1btYas2gIhWwb8dGMW0lAeisOk2MrVYwR"
     pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
     pred_df = pd.read_csv(pred_url, encoding='utf-8')
-    pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
+    pred_df["datetime"] = pd.to_datetime(pred_df["datetime"]),
+    pred_df["datetime"] = pred_df["datetime"].dt.strftime("%H:%M:%S"),
     pred_df.set_index("datetime", inplace=True)
 
     # === 실시간 CSV (2초마다 추가 표시용) ===
     live_file_id = "1Jh9p9O5H1SBtY8uIC8KvAo3aiOXRXMi6"
     live_url = f"https://drive.google.com/uc?id={live_file_id}"
-    live_df_full = pd.read_csv(live_url, encoding="utf-8")
+    live_df_full = pd.read_csv(live_url, encoding="utf-8"),
+    live_df_full["Timestamp"] = live_df_full["Timestamp"].dt.strftime("%H:%M:%S"),
     live_df_full["Timestamp"] = pd.to_datetime(live_df_full["Timestamp"])
 
     # === 세션 상태 ===
