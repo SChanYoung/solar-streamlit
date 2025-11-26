@@ -214,7 +214,7 @@ with tab1:
         x=[], y=[],
         mode="lines+markers",
         name="실시간 평균 발전량",
-        line=dict(color="royalblue", width=3)
+        line=dict(color="royalblue", width=2)
     ))
     fig.update_layout(
         template="plotly_white",
