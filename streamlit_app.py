@@ -176,7 +176,7 @@ with tab1:
     
 
     # === 예측 CSV ===
-    pred_file_id = "1mS2yXbPP6gquar7E_K-85xT6L9UcdPbV"
+    pred_file_id = "1p912nIlbYNusVsbIjeZeA33__3fDn79R"
     pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
     pred_df = pd.read_csv(pred_url, encoding='utf-8')
     pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
@@ -207,7 +207,8 @@ with tab1:
         y=pred_df["predicted_pv"],
         mode="lines",
         name="예측 발전량",
-        line=dict(color="orange", dash="dot", width=2)
+        line=dict(color="orange", dash="dot", width=2),
+        height=700
     ))
     fig.add_trace(go.Scatter(
         x=[], y=[],
