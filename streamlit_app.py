@@ -218,7 +218,7 @@ with tab1:
         mode="lines + markers",
         name="실시간 발전량",
         line=dict(color="royalblue", width=2),
-        marker=dict(size=4, color="royalblue", opacity=1),
+        marker=dict(size=1, color="royalblue", opacity=1),
     ))
     fig.update_layout(
         template="plotly_white",
