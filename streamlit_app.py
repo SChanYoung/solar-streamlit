@@ -228,8 +228,8 @@ with tab1:
     chart = st.empty()
 
     # === 설정 ===
-    interval_sec = 3   # 몇 초마다 갱신할지
-    batch_size = 5     # 한 번에 몇 개 행을 추가할지
+    interval_sec = 2   # 몇 초마다 갱신할지
+    batch_size = 1     # 한 번에 몇 개 행을 추가할지
     
     for i in range(batch_size, len(live_df_full) + batch_size, batch_size):
         if not st.session_state.paused:
