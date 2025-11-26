@@ -207,8 +207,8 @@ with tab1:
         y=pred_df["predicted_pv"],
         mode="lines",
         name="예측 발전량",
-        line=dict(color="orange", dash="dot", width=2),
-        height=700
+        line=dict(color="orange", dash="dot", width=2)
+        
     ))
     fig.add_trace(go.Scatter(
         x=[], y=[],
@@ -219,7 +219,8 @@ with tab1:
     fig.update_layout(
         template="plotly_white",
         yaxis_title="발전량 (W)",
-        legend=dict(yanchor="top", y=1.1, xanchor="left", x=0)
+        legend=dict(yanchor="top", y=1.1, xanchor="left", x=0),
+        height=600
     )
 
     chart = st.empty()
