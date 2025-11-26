@@ -178,9 +178,10 @@ with tab1:
     pred_file_id = "1btYas2gIhWwb8dGMW0lAeisOk2MrVYwR"
     pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
     pred_df = pd.read_csv(pred_url, encoding='utf-8')
-    pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
+    pred_df = pred_df.reset_index(drop=True)
+    pred_df["datetime"] = pd.to_datetime(pred_df["datetime"], errors="coerce")
+    pred_df = pred_df.dropna(subset=["datetime"])
     pred_df["datetime"] = pred_df["datetime"].dt.strftime("%H:%M:%S")
-    pred_df.set_index("datetime", inplace=True)
 
     # === 실시간 CSV (2초마다 추가 표시용) ===
     live_file_id = "1Jh9p9O5H1SBtY8uIC8KvAo3aiOXRXMi6"
@@ -224,7 +225,7 @@ with tab1:
         template="plotly_white",
         yaxis_title="발전량 (W)",
         legend=dict(yanchor="top", y=1.1, xanchor="left", x=0),
-        height=650
+        height=600
     )
 
     chart = st.empty()
