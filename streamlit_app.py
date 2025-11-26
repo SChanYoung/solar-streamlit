@@ -227,18 +227,25 @@ with tab1:
 
     chart = st.empty()
 
-    # === 2초 단위 실시간 시뮬레이션 ===
-    for i in range(1, len(live_df_full) + 1):
+    # === 설정 ===
+    interval_sec = 3   # 몇 초마다 갱신할지
+    batch_size = 5     # 한 번에 몇 개 행을 추가할지
+    
+    for i in range(batch_size, len(live_df_full) + batch_size, batch_size):
         if not st.session_state.paused:
             try:
-                current_df = live_df_full.iloc[:i]
+                current_df = live_df_full.iloc[:i]   # i행까지 누적 표시
+                current_df["PV_P (W)"] = pd.to_numeric(current_df["PV_P (W)"], errors="coerce")
+    
                 fig.data[1].x = current_df["Timestamp"]
                 fig.data[1].y = current_df["PV_P (W)"]
                 chart.plotly_chart(fig, use_container_width=True, key=f"chart_{i}")
+    
             except Exception as e:
                 st.warning(f"⚠️ 데이터 오류: {e}")
         else:
             st.info("⏸ 데이터 갱신이 일시정지되었습니다.")
-            time.sleep(1)  # 일시정지 상태일 때는 짧게 대기
-
-        time.sleep(2)  # 🔹 2초마다 1행 추가
+            time.sleep(1)
+    
+        time.sleep(interval_sec)   # ✅ 3초마다 업데이트
+    
