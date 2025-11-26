@@ -173,20 +173,21 @@ with tab3:
 
 with tab1:
     st.subheader("🔴 실시간 발전량 비교")
-    
 
-    # === 예측 CSV ===
-    pred_file_id = "1p912nIlbYNusVsbIjeZeA33__3fDn79R"
+    # === 예측 CSV (고정) ===
+    pred_file_id = "1btYas2gIhWwb8dGMW0lAeisOk2MrVYwR"
     pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
     pred_df = pd.read_csv(pred_url, encoding='utf-8')
     pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
     pred_df.set_index("datetime", inplace=True)
 
-    # === 실시간 CSV ===
-    live_file_id = "1nu_9jaSUNJIPPi9PN_CJD1Tm3NRp-V8A"
+    # === 실시간 CSV (2초마다 추가 표시용) ===
+    live_file_id = "1Jh9p9O5H1SBtY8uIC8KvAo3aiOXRXMi6"
     live_url = f"https://drive.google.com/uc?id={live_file_id}"
+    live_df_full = pd.read_csv(live_url, encoding="utf-8")
+    live_df_full["Timestamp"] = pd.to_datetime(live_df_full["Timestamp"])
 
-    # === 세션 상태 저장 ===
+    # === 세션 상태 ===
     if "paused" not in st.session_state:
         st.session_state.paused = False
 
@@ -200,59 +201,44 @@ with tab1:
             if st.button("⏸ 일시정지"):
                 st.session_state.paused = True
 
-    # === 그래프 기본 구성 ===
+    # === 기본 그래프 구성 ===
     fig = go.Figure()
+    # 예측선
     fig.add_trace(go.Scatter(
         x=pred_df.index,
         y=pred_df["predicted_pv"],
         mode="lines",
         name="예측 발전량",
         line=dict(color="orange", dash="dot", width=2)
-        
     ))
+    # 실시간선
     fig.add_trace(go.Scatter(
         x=[], y=[],
         mode="lines+markers",
-        name="실시간 평균 발전량",
+        name="실시간 발전량",
         line=dict(color="royalblue", width=2)
     ))
     fig.update_layout(
         template="plotly_white",
         yaxis_title="발전량 (W)",
         legend=dict(yanchor="top", y=1.1, xanchor="left", x=0),
-        height=600
+        height=650
     )
 
     chart = st.empty()
 
-    # === 5분 주기 자동 업데이트 루프 ===
-    while True:
+    # === 2초 단위 실시간 시뮬레이션 ===
+    for i in range(1, len(live_df_full) + 1):
         if not st.session_state.paused:
             try:
-                live_df = pd.read_csv(live_url, encoding="utf-8")
-                if not live_df.empty:
-                    live_df["Timestamp"] = pd.to_datetime(live_df["Timestamp"])
-                    live_df.set_index("Timestamp", inplace=True)
-
-                    # 🔹 5분 단위 평균
-                    # resampled = live_df["PV_P (W)"].resample("5T").mean().reset_index()
-
-                    latest_time = live_df["Timestamp"].max()
-                    cutoff_time = latest_time - pd.Timedelta(minutes=5)
-                    
-                    fixed_df = live_df[live_df["Timestamp"] < cutoff_time]
-                    resampled = fixed_df["PV_P (W)"].resample("5T").mean().reset_index()
-
-                    # 그래프 갱신
-                    fig.data[1].x = resampled["Timestamp"]
-                    fig.data[1].y = resampled["PV_P (W)"]
-                    chart.plotly_chart(fig, use_container_width=True, key=f"chart_{random.randint(0,99999)}")
-                    
+                current_df = live_df_full.iloc[:i]
+                fig.data[1].x = current_df["Timestamp"]
+                fig.data[1].y = current_df["PV_P (W)"]
+                chart.plotly_chart(fig, use_container_width=True, key=f"chart_{i}")
             except Exception as e:
                 st.warning(f"⚠️ 데이터 오류: {e}")
         else:
             st.info("⏸ 데이터 갱신이 일시정지되었습니다.")
-        
-        time.sleep(300)  # 5분 단위 주기
+            time.sleep(1)  # 일시정지 상태일 때는 짧게 대기
 
-
+        time.sleep(2)  # 🔹 2초마다 1행 추가
