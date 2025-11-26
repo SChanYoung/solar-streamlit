@@ -183,7 +183,7 @@ with tab1:
     pred_df.set_index("datetime", inplace=True)
 
     # === 실시간 CSV ===
-    live_file_id = "1ET_6q9tvWQpNI0sVpRCIElg0LWcjNW0l"
+    live_file_id = "1nu_9jaSUNJIPPi9PN_CJD1Tm3NRp-V8A"
     live_url = f"https://drive.google.com/uc?id={live_file_id}"
 
     # === 세션 상태 저장 ===
