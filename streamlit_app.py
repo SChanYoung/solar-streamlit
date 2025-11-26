@@ -236,11 +236,17 @@ with tab1:
     for i in range(batch_size, len(live_df_full) + batch_size, batch_size):
         if not st.session_state.paused:
             try:
-                current_df = live_df_full.iloc[:i]   # i행까지 누적 표시
+                current_df = live_df_full.iloc[:i]
                 current_df["PV_P (W)"] = pd.to_numeric(current_df["PV_P (W)"], errors="coerce")
     
+                # ✅ 그래프 갱신
                 fig.data[1].x = current_df["Timestamp"]
                 fig.data[1].y = current_df["PV_P (W)"]
+    
+                # ✅ 마지막 점만 표시되도록 설정
+                fig.data[1].marker.size = [0]*(len(current_df)-1) + [8]  # 마지막만 점
+                fig.data[1].marker.color = ["rgba(0,0,0,0)"]*(len(current_df)-1) + ["royalblue"]
+    
                 chart.plotly_chart(fig, use_container_width=True, key=f"chart_{i}")
     
             except Exception as e:
