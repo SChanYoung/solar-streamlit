@@ -20,7 +20,7 @@ tab1, tab2, tab3 = st.tabs(["🔴 실시간 발전량 비교", "📈 발전량 �
 
 with tab2:
     st.subheader("📈 발전량 예측")
-    file_id = "1oXtwoKlvHTLvUMCG-ujigpiKw4w0kLnC"  # 👉 교체하세요
+    file_id = "1dFlslvAoFE2MOIgaBbOu_wr7Itnj378a"  # 👉 교체하세요
     url = f"https://drive.google.com/uc?id={file_id}"
     
     try:
@@ -92,7 +92,7 @@ with tab2:
 with tab3:
     st.subheader("🌤️ 기상 현황")
 
-    file_id = "1_dQOk67TgbgUHV2xkkX3-BPyZ1Cfznnf"   # 날씨 파일 ID로 바꾸면됨
+    file_id = "1c-jlwNKLHLfIRHS3JAcEDxihYBBeWLHH"   # 날씨 파일 ID로 바꾸면됨
     url = f"https://drive.google.com/uc?id={file_id}"
 
     try:
