@@ -114,8 +114,8 @@ with tab3:
                 y=df["ghi"],
                 mode="lines",  # ✅ 점(marker) 제거
                 name="GHI (W/m²)",
-                line=dict(color="orange", width=2),
-                height=1000
+                line=dict(color="orange", width=2)
+                
             ))
     
             # (2) Cloud opacity (오른쪽 y축)
