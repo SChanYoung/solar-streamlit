@@ -176,14 +176,14 @@ with tab1:
     st.subheader("🔴 실시간 발전량 비교")
 
     # === 예측 CSV (고정) ===
-    pred_file_id = "1btYas2gIhWwb8dGMW0lAeisOk2MrVYwR"
+    pred_file_id = "1Cj1wboRhKBd4F1Y-0TDCdo7n92Du6iYJ"
     pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
     pred_df = pd.read_csv(pred_url, encoding='utf-8')
     pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
     pred_df.set_index("datetime", inplace=True)
 
     # === 실시간 CSV (2초마다 추가 표시용) ===
-    live_file_id = "1Jh9p9O5H1SBtY8uIC8KvAo3aiOXRXMi6"
+    live_file_id = "1wuA2sAgQpmi-KMzsh8gb5tichhrmnekw"
     live_url = f"https://drive.google.com/uc?id={live_file_id}"
     live_df_full = pd.read_csv(live_url, encoding="utf-8")
     live_df_full["Timestamp"] = pd.to_datetime(live_df_full["Timestamp"])
@@ -231,7 +231,7 @@ with tab1:
     chart = st.empty()
 
     # === 설정 ===
-    interval_sec = 2   # 몇 초마다 갱신할지
+    interval_sec = 4   # 몇 초마다 갱신할지
     batch_size = 1     # 한 번에 몇 개 행을 추가할지
     
     for i in range(batch_size, len(live_df_full) + batch_size, batch_size):
