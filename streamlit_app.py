@@ -92,7 +92,7 @@ with tab2:
 with tab3:
     st.subheader("🌤️ 기상 현황")
 
-    file_id = "1c-jlwNKLHLfIRHS3JAcEDxihYBBeWLHH"   # 날씨 파일 ID로 바꾸면됨
+    file_id = "1Ap-Bmo98PDbcCZNrjUAx_ZiLSXMDCKKq"   # 날씨 파일 ID로 바꾸면됨
     url = f"https://drive.google.com/uc?id={file_id}"
 
     try:
