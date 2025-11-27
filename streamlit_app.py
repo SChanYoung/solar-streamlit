@@ -176,7 +176,7 @@ with tab1:
     st.subheader("🔴 실시간 발전량 비교")
 
     # === 예측 CSV (고정) ===
-    pred_file_id = "1Cj1wboRhKBd4F1Y-0TDCdo7n92Du6iYJ"
+    pred_file_id = "1pW7r8UNSX_niF1Z3T9DSgaEXAksKEdux"
     pred_url = f"https://drive.google.com/uc?id={pred_file_id}"
     pred_df = pd.read_csv(pred_url, encoding='utf-8')
     pred_df["datetime"] = pd.to_datetime(pred_df["datetime"])
